@@ -60,7 +60,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="bg-black-800 text-white p-4">
+      <header className="bg-black-800 text-white p-6  ">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-3xl font-bold">sena.ai</h1>
           <div>
@@ -96,10 +96,10 @@ export default function Home() {
               />
             </div>
             <div className="md:w-1/2 p-4">
-              <h2 className="text-4xl font-bold mb-4">
+              <h2 className="text-4xl font-bold mb-14">
                 Gain Insights with Our Powerful AI-Driven Sentiment Analysis Tool
               </h2>
-              <p className="text-xl mb-8">
+              <p className="text-xl mb-10">
                 Our cutting-edge AI-driven Sentiment Analysis Tool is designed to help you understand the sentiment, emotions, and PG-rated content within your URLs, text, documents, images, videos, and more.
               </p>
               <div className="bg-black-100 p-6 rounded-lg shadow-lg mb-8">
@@ -139,7 +139,7 @@ export default function Home() {
                       onChange={handleTextInputChange}
                       placeholder="Enter URL or Text"
                       className="block bg-black text-white w-full mb-4 p-2 border border-blue-300 rounded"
-                      rows={4} 
+                      rows={4}
                     ></textarea>
                     <button
                       onClick={handleTextSubmit}
@@ -178,7 +178,7 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-            <div className="md:w-1/2 p-4">
+            <div className="md:w-1/2 p-6">
               <motion.img
                 src="https://miro.medium.com/v2/1*_JW1JaMpK_fVGld8pd1_JQ.gif"
                 alt="Hero Image"
@@ -193,7 +193,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-black-800 text-white p-4">
+      <footer className="bg-black-800 text-white p-6">
         <div>
           <InfiniteScrollText />
         </div>
