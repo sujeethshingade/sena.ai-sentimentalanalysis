@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import InfiniteScrollText from './InfiniteScroll';
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
@@ -40,7 +41,21 @@ export default function Home() {
       {/* Header */}
       <header className="bg-black-800 text-white p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">Sena - Sentimental Analysis</h1>
+          <h1 className="text-3xl font-bold">sena.ai</h1>
+          <div>
+            <a
+              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              className="text-red-500 font-bold mr-4"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', '_blank');
+              }}
+            >
+              Do Not Press
+            </a>
+          </div>
         </div>
       </header>
 
@@ -51,9 +66,9 @@ export default function Home() {
           <div className="container mx-auto flex flex-col md:flex-row items-center justify-between text-center md:text-left">
             <div className="md:w-1/2 p-4">
               <motion.img
-                src="/path-to-your-image.png"
+                src="https://cdn.dribbble.com/users/119773/screenshots/4226968/media/98182f9f4afd3cff228e47fe62cdbd5c.gif"
                 alt="Hero Image"
-                className="w-full max-w-md mx-auto mb-8 md:mb-0"
+                className="w-full max-w-lg mx-auto mb-8 md:mb-0 rounded-lg"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 2 }}
@@ -77,7 +92,7 @@ export default function Home() {
                   disabled={!file}
                   className="bg-blue-500 text-white px-4 py-2 rounded w-full"
                 >
-                  Upload Image
+                  Upload Files
                 </button>
               </div>
             </div>
@@ -86,21 +101,48 @@ export default function Home() {
 
         {/* Features Section */}
         <section className="bg-black-100 py-20">
-          <div className="container mx-auto text-left">
-            <h3 className="text-3xl font-bold mb-8">Key Features</h3>
-            <ul className="text-lg mb-8">
-              <li className="mb-4"><strong>Easy File Upload:</strong> Simply upload your text files in various formats, and let our AI do the rest.</li>
-              <li className="mb-4"><strong>Accurate Sentiment Analysis:</strong> Our advanced algorithms provide precise sentiment classification, identifying whether the text is positive, negative, or neutral.</li>
-              <li className="mb-4"><strong>Comprehensive Insights:</strong> Gain a deeper understanding of the emotional tone of your data with detailed reports and visualizations.</li>
-              <li className="mb-4"><strong>Real-Time Processing:</strong> Get instant results, allowing you to make data-driven decisions quickly and efficiently.</li>
-              <li className="mb-4"><strong>Customizable Options:</strong> Tailor the analysis to suit your specific needs with customizable settings and parameters.</li>
-            </ul>
+          <div className="container mx-auto flex flex-col md:flex-row items-center">
+            <div className="md:w-1/2 p-4">
+              <h3 className="text-3xl font-bold mb-8 text-left">Key Features</h3>
+              <ul className="space-y-4 text-left">
+                <li className="p-4 bg-white shadow rounded-lg">
+                  <strong>Easy File Upload:</strong> Simply upload your text files in various formats, and let our AI do the rest.
+                </li>
+                <li className="p-4 bg-white shadow rounded-lg">
+                  <strong>Accurate Sentiment Analysis:</strong> Our advanced algorithms provide precise sentiment classification, identifying whether the text is positive, negative or neutral.
+                </li>
+                <li className="p-4 bg-white shadow rounded-lg">
+                  <strong>Comprehensive Insights:</strong> Gain a deeper understanding of the emotional tone of your data with detailed reports and visualizations.
+                </li>
+                <li className="p-4 bg-white shadow rounded-lg">
+                  <strong>Real-Time Processing:</strong> Get instant results, allowing you to make data-driven decisions quickly and efficiently.
+                </li>
+                <li className="p-4 bg-white shadow rounded-lg">
+                  <strong>Customizable Options:</strong> Tailor the analysis to suit your specific needs with customizable settings and parameters.
+                </li>
+              </ul>
+            </div>
+
+            <div className="md:w-1/2 p-4">
+              <motion.img
+                src="https://miro.medium.com/v2/1*_JW1JaMpK_fVGld8pd1_JQ.gif"
+                alt="Hero Image"
+                className="w-full max-w-lg mx-auto mb-8 md:mb-0 rounded-lg"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 2 }}
+              />
+            </div>
           </div>
         </section>
+
       </main>
 
       {/* Footer */}
       <footer className="bg-black-800 text-white p-4">
+        <div>
+          <InfiniteScrollText />
+        </div>
         <div className="container mx-auto flex justify-center">
           <p>&copy; 2024 Raptors. All rights reserved.</p>
         </div>
