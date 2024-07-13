@@ -43,10 +43,10 @@ const ScrollTitle = styled.div`
   }
   a {
     text-decoration: none;
-    color: #D2D4D3;
+    color: #FFFFFF;
   }
   a:hover {
-    -webkit-text-stroke: 1px #D2D4D3;
+    -webkit-text-stroke: 1px #FFFFFF;
     color: transparent;
   }
 `;

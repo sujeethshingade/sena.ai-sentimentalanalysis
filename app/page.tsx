@@ -6,7 +6,9 @@ import { motion } from 'framer-motion';
 import InfiniteScrollText from './InfiniteScroll';
 
 export default function Home() {
+  const [inputType, setInputType] = useState('file');
   const [file, setFile] = useState<File | null>(null);
+  const [textInput, setTextInput] = useState('');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -17,7 +19,7 @@ export default function Home() {
   const handleUpload = async () => {
     try {
       if (!file) {
-        console.error('No file selected.');
+        console.error('No File Selected.');
         return;
       }
 
@@ -33,6 +35,25 @@ export default function Home() {
       console.log('File uploaded successfully:', response.data);
     } catch (error) {
       console.error('Error uploading file:', error);
+    }
+  };
+
+  const handleTextInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextInput(e.target.value);
+  };
+
+  const handleTextSubmit = async () => {
+    try {
+      if (!textInput) {
+        console.error('No Text Input.');
+        return;
+      }
+
+      const response = await axios.post('/api/analyze', { text: textInput });
+
+      console.log('Text analysis result:', response.data);
+    } catch (error) {
+      console.error('Error analyzing text:', error);
     }
   };
 
@@ -79,50 +100,84 @@ export default function Home() {
                 Gain Insights with Our Powerful AI-Driven Sentiment Analysis Tool
               </h2>
               <p className="text-xl mb-8">
-                Discover the hidden sentiments behind your text data effortlessly. Our cutting-edge AI-driven Sentiment Analysis Tool is designed to help you understand the emotions and opinions within your documents, social media posts, customer reviews, and more.
+                Our cutting-edge AI-driven Sentiment Analysis Tool is designed to help you understand the sentiment, emotions, and PG-rated content within your URLs, text, documents, images, videos, and more.
               </p>
-              <div className="bg-gray-100 p-6 rounded-lg shadow-lg mb-8">
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  className="block w-full mb-4 p-2 border border-blue-300 rounded"
-                />
-                <button
-                  onClick={handleUpload}
-                  disabled={!file}
-                  className="bg-blue-500 text-white px-4 py-2 rounded w-full"
-                >
-                  Upload Files
-                </button>
+              <div className="bg-black-100 p-6 rounded-lg shadow-lg mb-8">
+                <div className="flex justify-center mb-4">
+                  <button
+                    className={`px-4 py-2 rounded-r rounded-l ${inputType === 'file' ? 'bg-blue-500 text-white' : 'bg-white-200'}`}
+                    onClick={() => setInputType('file')}
+                  >
+                    Upload File
+                  </button>
+                  <button
+                    className={`px-4 py-2 rounded-r rounded -l ${inputType === 'text' ? 'bg-blue-500 text-white' : 'bg-white-200'}`}
+                    onClick={() => setInputType('text')}
+                  >
+                    Enter URL/Text
+                  </button>
+                </div>
+                {inputType === 'file' ? (
+                  <div>
+                    <input
+                      type="file"
+                      onChange={handleFileChange}
+                      className="block w-full mb-4 p-2 border border-blue-300 rounded"
+                    />
+                    <button
+                      onClick={handleUpload}
+                      disabled={!file}
+                      className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+                    >
+                      Upload File
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <textarea
+                      value={textInput}
+                      onChange={handleTextInputChange}
+                      placeholder="Enter URL or Text"
+                      className="block bg-black text-white w-full mb-4 p-2 border border-blue-300 rounded"
+                      rows={4} 
+                    ></textarea>
+                    <button
+                      onClick={handleTextSubmit}
+                      disabled={!textInput}
+                      className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+                    >
+                      Enter URL/Text
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </section>
 
         {/* Features Section */}
-        <section className="bg-black-100 py-20">
+        <section className="bg-black-100 py-10">
           <div className="container mx-auto flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 p-4">
-              <h3 className="text-3xl font-bold mb-8 text-left">Key Features</h3>
+              <h3 className="text-3xl font-bold mb-8 text-left text-white">Key Features</h3>
               <ul className="space-y-4 text-left">
-                <li className="p-4 bg-white shadow rounded-lg">
+                <li className="p-4 bg-white shadow rounded-lg text-black">
                   <strong>Easy File Upload:</strong> Simply upload your text files in various formats, and let our AI do the rest.
                 </li>
-                <li className="p-4 bg-white shadow rounded-lg">
+                <li className="p-4 bg-white shadow rounded-lg text-black">
                   <strong>Accurate Sentiment Analysis:</strong> Our advanced algorithms provide precise sentiment classification, identifying whether the text is positive, negative or neutral.
                 </li>
-                <li className="p-4 bg-white shadow rounded-lg">
+                <li className="p-4 bg-white shadow rounded-lg text-black">
                   <strong>Comprehensive Insights:</strong> Gain a deeper understanding of the emotional tone of your data with detailed reports and visualizations.
                 </li>
-                <li className="p-4 bg-white shadow rounded-lg">
+                <li className="p-4 bg-white shadow rounded-lg text-black">
                   <strong>Real-Time Processing:</strong> Get instant results, allowing you to make data-driven decisions quickly and efficiently.
                 </li>
-                <li className="p-4 bg-white shadow rounded-lg">
+                <li className="p-4 bg-white shadow rounded-lg text-black">
                   <strong>Customizable Options:</strong> Tailor the analysis to suit your specific needs with customizable settings and parameters.
                 </li>
               </ul>
             </div>
-
             <div className="md:w-1/2 p-4">
               <motion.img
                 src="https://miro.medium.com/v2/1*_JW1JaMpK_fVGld8pd1_JQ.gif"
@@ -135,7 +190,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
       </main>
 
       {/* Footer */}
