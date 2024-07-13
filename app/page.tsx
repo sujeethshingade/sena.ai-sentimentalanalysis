@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
 export default function Home() {
   const [file, setFile] = useState(null);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: { target: { files: SetStateAction<null>[]; }; }) => {
     setFile(e.target.files[0]);
   };
 
