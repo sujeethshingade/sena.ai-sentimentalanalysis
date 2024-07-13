@@ -40,8 +40,22 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       {/* Header */}
       <header className="bg-black-800 text-white p-4">
-        <div className="container mx-auto flex justify-center items-center">
-          <h1 className="text-xl font-bold">sena.ai</h1>
+        <div className="container mx-auto flex justify-between items-center">
+          <h1 className="text-3xl font-bold">sena.ai</h1>
+          <div>
+            <a
+              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              className="text-red-500 font-bold mr-4"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', '_blank');
+              }}
+            >
+              Do Not Press
+            </a>
+          </div>
         </div>
       </header>
 
@@ -126,9 +140,9 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-black-800 text-white p-4">
-      <div>
-        <InfiniteScrollText />
-      </div>
+        <div>
+          <InfiniteScrollText />
+        </div>
         <div className="container mx-auto flex justify-center">
           <p>&copy; 2024 Raptors. All rights reserved.</p>
         </div>
