@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import InfiniteScrollText from './InfiniteScroll';
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
@@ -125,6 +126,9 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-black-800 text-white p-4">
+      <div>
+        <InfiniteScrollText />
+      </div>
         <div className="container mx-auto flex justify-center">
           <p>&copy; 2024 Raptors. All rights reserved.</p>
         </div>
