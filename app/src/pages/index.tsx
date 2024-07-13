@@ -7,16 +7,16 @@ import CallToActionSection from '../components/CallToActionSection';
 import ContactSection from '../components/ContactSection';
 
 const HomePage = () => {
-  return (
-    <Layout>
-      <HeroSection />
-      <FeaturesSection />
-      <BenefitsSection />
-      <HowItWorksSection />
-      <CallToActionSection />
-      <ContactSection />
-    </Layout>
-  );
+    return (
+        <Layout>
+            <HeroSection />
+            <FeaturesSection />
+            <BenefitsSection />
+            <HowItWorksSection />
+            <CallToActionSection />
+            <ContactSection />
+        </Layout>
+    );
 };
 
 export default HomePage;
