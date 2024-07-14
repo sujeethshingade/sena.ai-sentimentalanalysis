@@ -13,25 +13,6 @@ interface AnalysisResult {
   age_rating: string;
 }
 
-// const DoNotPressButton: React.FC = () => {
-//   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-//     e.preventDefault();
-//     window.open('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', '_blank');
-//   };
-
-//   return (
-
-//       href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-//       className="text-red-500 font-bold mr-4"
-//       target="_blank"
-//       rel="noopener noreferrer"
-//       onClick={handleClick}
-//     >
-//       Do Not Press
-//     </a>
-//   );
-// };
-
 export default function Home() {
   const [inputType, setInputType] = useState<'file' | 'text'>('file');
   const [file, setFile] = useState<File | null>(null);
@@ -93,9 +74,6 @@ export default function Home() {
       <header className="bg-black-800 text-white p-6">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-3xl font-bold">sena.ai</h1>
-          {/* <div>
-            <DoNotPressButton />
-          </div> */}
         </div>
       </header>
 
@@ -124,18 +102,20 @@ export default function Home() {
               </p>
               <div className="bg-black-100 p-6 rounded-lg shadow-lg mb-8">
                 <div className="flex justify-center mb-4">
-                  <button
-                    className={`px-4 py-2 rounded-r rounded-l ${inputType === 'file' ? 'bg-blue-500 text-white' : 'bg-white-200'}`}
-                    onClick={() => setInputType('file')}
-                  >
-                    Upload File
-                  </button>
-                  <button
-                    className={`px-4 py-2 rounded-r rounded-l ${inputType === 'text' ? 'bg-blue-500 text-white' : 'bg-white-200'}`}
-                    onClick={() => setInputType('text')}
-                  >
-                    Enter URL/Text
-                  </button>
+                  <div className="flex">
+                    <div
+                      className={`px-4 py-2 cursor-pointer ${inputType === 'file' ? 'underline text-blue-500' : 'no-underline text-white'}`}
+                      onClick={() => setInputType('file')}
+                    >
+                      Upload File
+                    </div>
+                    <div
+                      className={`px-4 py-2 cursor-pointer ${inputType === 'text' ? 'underline text-blue-500' : 'no-underline text-white'}`}
+                      onClick={() => setInputType('text')}
+                    >
+                      Enter URL
+                    </div>
+                  </div>
                 </div>
                 {inputType === 'file' ? (
                   <div>
@@ -149,7 +129,7 @@ export default function Home() {
                       disabled={!file}
                       className="bg-blue-500 text-white px-4 py-2 rounded w-full"
                     >
-                      Upload and Analyze File
+                      Analyse File
                     </button>
                   </div>
                 ) : (
@@ -157,7 +137,7 @@ export default function Home() {
                     <textarea
                       value={textInput}
                       onChange={handleTextInputChange}
-                      placeholder="Enter URL or Text"
+                      placeholder="Enter URL"
                       className="block bg-black text-white w-full mb-4 p-2 border border-blue-300 rounded"
                       rows={4}
                     ></textarea>
@@ -166,13 +146,13 @@ export default function Home() {
                       disabled={!textInput}
                       className="bg-blue-500 text-white px-4 py-2 rounded w-full"
                     >
-                      Analyze URL/Text
+                      Analyse URL
                     </button>
                   </div>
                 )}
               </div>
               {analysisResult && (
-                <div className="bg-white p-4 rounded-lg shadow-lg">
+                <div className="bg-black text-white p-4 rounded-lg shadow-lg">
                   <h3 className="text-2xl font-bold mb-4">Analysis Result</h3>
                   <p><strong>Sentiment:</strong> {analysisResult.sentiment}</p>
                   <p><strong>Emotion:</strong> {analysisResult.emotion}</p>
