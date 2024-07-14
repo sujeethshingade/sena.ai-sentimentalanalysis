@@ -34,8 +34,15 @@ emotion_tokenizer = AutoTokenizer.from_pretrained(
     'j-hartmann/emotion-english-distilroberta-base')
 emotion_labels = emotion_model.config.id2label
 
+model_name = "distilbert-base-uncased"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained(
+    model_name, num_labels=5)
+# Define the MPAA ratings
+ratings = ["G", "PG", "PG-13", "R", "NC-17"]
+
 restricted_keywords = ['violence', 'drug', 'alcohol',
-                       'explicit', 'adult', 'gambling', 'weapon', 'terrorism']
+                       'explicit', 'adult', 'gambling', 'weapon', 'terrorism', 'suicide', 'shooting', 'blood', 'kill', 'murder', '']
 
 
 def analyze_text(text):
@@ -46,11 +53,13 @@ def analyze_text(text):
     emotions = []
 
     for chunk in chunks:
-        inputs = emotion_tokenizer(chunk, return_tensors="pt", truncation=True, padding=True)
+        inputs = emotion_tokenizer(
+            chunk, return_tensors="pt", truncation=True, padding=True)
         with torch.no_grad():
             sentiment_result = sentiment_pipeline(chunk)
             emotion_result = emotion_model(**inputs)
-            emotion_probs = torch.nn.functional.softmax(emotion_result.logits, dim=-1)
+            emotion_probs = torch.nn.functional.softmax(
+                emotion_result.logits, dim=-1)
             emotion_label = emotion_labels[torch.argmax(emotion_probs).item()]
 
         sentiments.extend(sentiment_result)
@@ -133,12 +142,13 @@ def extract_text_from_url(url):
         return None
 
 
+# Function to predict MPAA rating
 def determine_age_appropriateness(text):
-    text_lower = text.lower()
-    for keyword in restricted_keywords:
-        if keyword in text_lower:
-            return "R"
-    return "G"
+    inputs = tokenizer(text, return_tensors="pt",
+                       padding=True, truncation=True, max_length=512)
+    outputs = model(**inputs)
+    prediction = torch.argmax(outputs.logits, dim=1).item()
+    return ratings[prediction]
 
 
 @app.route('/upload', methods=['POST'])
@@ -172,14 +182,18 @@ def analyze_content():
         if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.svg')):
             result = analyze_image(file_path)
         elif filename.lower().endswith(('.pdf', '.txt')):
-            text = extract_text_from_pdf(file_path) if filename.lower().endswith('.pdf') else extract_text_from_txt(file_path)
+            text = extract_text_from_pdf(file_path) if filename.lower().endswith(
+                '.pdf') else extract_text_from_txt(file_path)
             if not isinstance(text, str):
-                app.logger.error(f"Extracted text is not a string: {type(text)}")
+                app.logger.error(
+                    f"Extracted text is not a string: {type(text)}")
                 return jsonify({'error': 'Failed to extract text from file'}), 500
-            app.logger.debug(f"Extracted text: {text[:100]}")  # Log the first 100 characters of the text
+            # Log the first 100 characters of the text
+            app.logger.debug(f"Extracted text: {text[:100]}")
             sentiment, emotion = analyze_text(text)
             age_rating = determine_age_appropriateness(text)
-            result = {'sentiment': sentiment, 'emotion': emotion, 'age_rating': age_rating}
+            result = {'sentiment': sentiment,
+                      'emotion': emotion, 'age_rating': age_rating}
         else:
             return jsonify({'error': 'Unsupported file type'}), 400
 
@@ -188,6 +202,7 @@ def analyze_content():
     except Exception as e:
         app.logger.error(f"Error analyzing content: {e}")
         return jsonify({'error': 'Content analysis failed'}), 500
+
 
 def extract_text_from_txt(txt_path):
     with open(txt_path, 'r', encoding='utf-8') as file:
@@ -215,7 +230,6 @@ def analyze_url():
     except Exception as e:
         app.logger.error(f"Error analyzing URL: {e}")
         return jsonify({'error': 'URL analysis failed'}), 500
-
 
 
 if __name__ == "__main__":
