@@ -87,7 +87,7 @@ export default function Home() {
               textDecoration: 'none'
             }}
           >
-            Do Not Press
+            AD3X Special!
           </a>
         </div>
       </header>
@@ -96,13 +96,13 @@ export default function Home() {
       <main className="flex-grow">
 
         {/* Hero Section */}
-        < section className="relative bg-black py-20 flex justify-center items-center" >
+        <section className="relative bg-black py-20 flex justify-center items-center">
           <div className="container mx-auto flex flex-col md:flex-row items-center justify-between text-center md:text-left">
             <div className="md:w-1/2 p-4">
               <motion.img
                 src="https://cdn.dribbble.com/users/119773/screenshots/4226968/media/98182f9f4afd3cff228e47fe62cdbd5c.gif"
                 alt="Hero Image"
-                className="w-full max-w-lg mx-auto mb-8 md:mb-0 rounded-lg"
+                className="w-full max-w-lg mx-auto mb-8 md:mb-0 rounded-lg glow-border"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 2 }}
@@ -154,7 +154,7 @@ export default function Home() {
                       onChange={handleTextInputChange}
                       placeholder="Enter URL"
                       className="block bg-black text-white w-full mb-4 p-2 border border-blue-300 rounded"
-                      rows={4}
+                      rows={1}
                     ></textarea>
                     <button
                       onClick={handleTextSubmit}
@@ -184,14 +184,13 @@ export default function Home() {
                   <p><strong>Emotion:</strong> {analysisResult.emotion}</p>
                   <p><strong>Age Rating:</strong> {analysisResult.age_rating}</p>
                 </div>
-
               )}
             </div>
           </div>
-        </section >
+        </section>
 
         {/* Features Section */}
-        < section className="bg-black-100 py-10" >
+        <section className="bg-black-100 py-10">
           <div className="container mx-auto flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 p-4">
               <h3 className="text-3xl font-bold mb-8 text-left text-white">Key Features</h3>
@@ -217,15 +216,15 @@ export default function Home() {
               <motion.img
                 src="https://miro.medium.com/v2/1*_JW1JaMpK_fVGld8pd1_JQ.gif"
                 alt="Hero Image"
-                className="w-full max-w-lg mx-auto mb-8 md:mb-0 rounded-lg"
+                className="w-full max-w-lg mx-auto mb-8 md:mb-0 rounded-lg glow-border"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 2 }}
               />
             </div>
           </div>
-        </section >
-      </main >
+        </section>
+      </main>
 
       {/* Footer */}
       <footer className="bg-black-800 text-white p-6">
