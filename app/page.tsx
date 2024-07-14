@@ -74,6 +74,21 @@ export default function Home() {
       <header className="bg-black-800 text-white p-6">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-3xl font-bold">sena.ai</h1>
+          <a
+            href="https://www.youtube.com/watch?v=mx86-rTclzA&autoplay=1"
+            className="btn-red"
+            style={{
+              backgroundColor: 'red',
+              color: 'white',
+              padding: '0.5rem 1rem',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              textDecoration: 'none'
+            }}
+          >
+            Do Not Press
+          </a>
         </div>
       </header>
 
@@ -153,23 +168,23 @@ export default function Home() {
               </div>
               {analysisResult && (
                 <div className="bg-black text-white p-4 rounded-lg shadow-lg">
-                <h3 className="text-2xl font-bold mb-4">Analysis Result</h3>
-                <p>
-                  <strong>Sentiment:</strong> {analysisResult.sentiment}
-                  {analysisResult.sentiment === 'Positive' && (
-                    <img src="positive.png" alt="Positive Emoji" className="inline-block ml-2 w-6 h-6" />
-                  )}
-                  {analysisResult.sentiment === 'Neutral' && (
-                    <img src="neutral.png" alt="Neutral Emoji" className="inline-block ml-2 w-6 h-6" />
-                  )}
-                  {analysisResult.sentiment === 'Negative' && (
-                    <img src="negative.png" alt="Negative Emoji" className="inline-block ml-2 w-6 h-6" />
-                  )}
-                </p>
-                <p><strong>Emotion:</strong> {analysisResult.emotion}</p>
-                <p><strong>Age Rating:</strong> {analysisResult.age_rating}</p>
-              </div>
-              
+                  <h3 className="text-2xl font-bold mb-4">Analysis Result</h3>
+                  <p>
+                    <strong>Sentiment:</strong> {analysisResult.sentiment}
+                    {analysisResult.sentiment === 'Positive' && (
+                      <img src="positive.png" alt="Positive Emoji" className="inline-block ml-2 w-6 h-6" />
+                    )}
+                    {analysisResult.sentiment === 'Neutral' && (
+                      <img src="neutral.png" alt="Neutral Emoji" className="inline-block ml-2 w-6 h-6" />
+                    )}
+                    {analysisResult.sentiment === 'Negative' && (
+                      <img src="negative.png" alt="Negative Emoji" className="inline-block ml-2 w-6 h-6" />
+                    )}
+                  </p>
+                  <p><strong>Emotion:</strong> {analysisResult.emotion}</p>
+                  <p><strong>Age Rating:</strong> {analysisResult.age_rating}</p>
+                </div>
+
               )}
             </div>
           </div>
