@@ -1,16 +1,44 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import InfiniteScrollText from './InfiniteScroll';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
+interface AnalysisResult {
+  sentiment: string;
+  emotion: string;
+  age_rating: string;
+}
+
+// const DoNotPressButton: React.FC = () => {
+//   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+//     e.preventDefault();
+//     window.open('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', '_blank');
+//   };
+
+//   return (
+
+//       href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+//       className="text-red-500 font-bold mr-4"
+//       target="_blank"
+//       rel="noopener noreferrer"
+//       onClick={handleClick}
+//     >
+//       Do Not Press
+//     </a>
+//   );
+// };
+
 export default function Home() {
-  const [inputType, setInputType] = useState('file');
+  const [inputType, setInputType] = useState<'file' | 'text'>('file');
   const [file, setFile] = useState<File | null>(null);
   const [textInput, setTextInput] = useState('');
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFile(e.target.files[0]);
     }
@@ -26,19 +54,20 @@ export default function Home() {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await axios.post('/api/upload', formData, {
+      const response = await axios.post<AnalysisResult>(`${API_URL}/analyze`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      console.log('File uploaded successfully:', response.data);
+      console.log('File analyzed successfully:', response.data);
+      setAnalysisResult(response.data);
     } catch (error) {
-      console.error('Error uploading file:', error);
+      console.error('Error analyzing file:', error);
     }
   };
 
-  const handleTextInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setTextInput(e.target.value);
   };
 
@@ -49,9 +78,10 @@ export default function Home() {
         return;
       }
 
-      const response = await axios.post('/api/analyze', { text: textInput });
+      const response = await axios.post<AnalysisResult>(`${API_URL}/analyze-url`, { url: textInput });
 
       console.log('Text analysis result:', response.data);
+      setAnalysisResult(response.data);
     } catch (error) {
       console.error('Error analyzing text:', error);
     }
@@ -60,30 +90,20 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="bg-black-800 text-white p-6  ">
+      <header className="bg-black-800 text-white p-6">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-3xl font-bold">sena.ai</h1>
-          <div>
-            <a
-              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-              className="text-red-500 font-bold mr-4"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                e.preventDefault();
-                window.open('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1', '_blank');
-              }}
-            >
-              Do Not Press
-            </a>
-          </div>
+          {/* <div>
+            <DoNotPressButton />
+          </div> */}
         </div>
       </header>
 
       {/* Main content */}
       <main className="flex-grow">
+
         {/* Hero Section */}
-        <section className="relative bg-black py-20 flex justify-center items-center">
+        < section className="relative bg-black py-20 flex justify-center items-center" >
           <div className="container mx-auto flex flex-col md:flex-row items-center justify-between text-center md:text-left">
             <div className="md:w-1/2 p-4">
               <motion.img
@@ -111,7 +131,7 @@ export default function Home() {
                     Upload File
                   </button>
                   <button
-                    className={`px-4 py-2 rounded-r rounded -l ${inputType === 'text' ? 'bg-blue-500 text-white' : 'bg-white-200'}`}
+                    className={`px-4 py-2 rounded-r rounded-l ${inputType === 'text' ? 'bg-blue-500 text-white' : 'bg-white-200'}`}
                     onClick={() => setInputType('text')}
                   >
                     Enter URL/Text
@@ -129,7 +149,7 @@ export default function Home() {
                       disabled={!file}
                       className="bg-blue-500 text-white px-4 py-2 rounded w-full"
                     >
-                      Upload File
+                      Upload and Analyze File
                     </button>
                   </div>
                 ) : (
@@ -146,17 +166,25 @@ export default function Home() {
                       disabled={!textInput}
                       className="bg-blue-500 text-white px-4 py-2 rounded w-full"
                     >
-                      Enter URL/Text
+                      Analyze URL/Text
                     </button>
                   </div>
                 )}
               </div>
+              {analysisResult && (
+                <div className="bg-white p-4 rounded-lg shadow-lg">
+                  <h3 className="text-2xl font-bold mb-4">Analysis Result</h3>
+                  <p><strong>Sentiment:</strong> {analysisResult.sentiment}</p>
+                  <p><strong>Emotion:</strong> {analysisResult.emotion}</p>
+                  <p><strong>Age Rating:</strong> {analysisResult.age_rating}</p>
+                </div>
+              )}
             </div>
           </div>
-        </section>
+        </section >
 
         {/* Features Section */}
-        <section className="bg-black-100 py-10">
+        < section className="bg-black-100 py-10" >
           <div className="container mx-auto flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 p-4">
               <h3 className="text-3xl font-bold mb-8 text-left text-white">Key Features</h3>
@@ -189,8 +217,8 @@ export default function Home() {
               />
             </div>
           </div>
-        </section>
-      </main>
+        </section >
+      </main >
 
       {/* Footer */}
       <footer className="bg-black-800 text-white p-6">

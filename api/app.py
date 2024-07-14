@@ -12,10 +12,17 @@ import torch
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 UPLOAD_FOLDER = 'uploads/'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+@app.route('/api/data')
+def get_data():
+    return {"message": "Hello from Flask"}
+
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -176,6 +183,9 @@ def analyze_content():
         else:
             return jsonify({'error': 'Unsupported file type'}), 400
 
+        # Clean up the uploaded file
+        os.remove(file_path)
+
         return jsonify(result), 200
     except Exception as e:
         app.logger.error(f"Error analyzing content: {e}")
@@ -206,5 +216,6 @@ def analyze_url():
         app.logger.error(f"Error analyzing URL: {e}")
         return jsonify({'error': 'URL analysis failed'}), 500
 
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
