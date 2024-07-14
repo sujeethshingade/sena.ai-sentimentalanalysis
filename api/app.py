@@ -40,27 +40,23 @@ restricted_keywords = ['violence', 'drug', 'alcohol',
 
 def analyze_text(text):
     max_length = 512
+    chunks = [text[i:i + max_length] for i in range(0, len(text), max_length)]
+
     sentiments = []
     emotions = []
 
-    inputs = emotion_tokenizer(
-        text, return_tensors="pt", truncation=True, padding=True)
-    for i in range(0, len(inputs["input_ids"][0]), max_length):
-        chunk = {key: value[:, i:i + max_length]
-                 for key, value in inputs.items()}
-        if chunk["input_ids"].shape[1] == 0:
-            continue  # Skip empty chunks
-
+    for chunk in chunks:
+        inputs = emotion_tokenizer(chunk, return_tensors="pt", truncation=True, padding=True)
         with torch.no_grad():
-            sentiment_result = sentiment_pipeline(text[i:i + max_length])
-            emotion_result = emotion_model(**chunk)
-            emotion_probs = torch.nn.functional.softmax(
-                emotion_result.logits, dim=-1)
+            sentiment_result = sentiment_pipeline(chunk)
+            emotion_result = emotion_model(**inputs)
+            emotion_probs = torch.nn.functional.softmax(emotion_result.logits, dim=-1)
             emotion_label = emotion_labels[torch.argmax(emotion_probs).item()]
 
         sentiments.extend(sentiment_result)
         emotions.append(emotion_label)
-        return map_sentiment(sentiments), map_emotion(emotions)
+
+    return map_sentiment(sentiments), map_emotion(emotions)
 
 
 def map_sentiment(sentiment_results):
@@ -172,24 +168,31 @@ def analyze_content():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
 
-        if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+        result = {}
+        if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.svg')):
             result = analyze_image(file_path)
-        elif filename.lower().endswith('.pdf'):
-            text = extract_text_from_pdf(file_path)
+        elif filename.lower().endswith(('.pdf', '.txt')):
+            text = extract_text_from_pdf(file_path) if filename.lower().endswith('.pdf') else extract_text_from_txt(file_path)
+            if not isinstance(text, str):
+                app.logger.error(f"Extracted text is not a string: {type(text)}")
+                return jsonify({'error': 'Failed to extract text from file'}), 500
+            app.logger.debug(f"Extracted text: {text[:100]}")  # Log the first 100 characters of the text
             sentiment, emotion = analyze_text(text)
             age_rating = determine_age_appropriateness(text)
-            result = {'sentiment': sentiment,
-                      'emotion': emotion, 'age_rating': age_rating}
+            result = {'sentiment': sentiment, 'emotion': emotion, 'age_rating': age_rating}
         else:
             return jsonify({'error': 'Unsupported file type'}), 400
 
-        # Clean up the uploaded file
         os.remove(file_path)
-
         return jsonify(result), 200
     except Exception as e:
         app.logger.error(f"Error analyzing content: {e}")
         return jsonify({'error': 'Content analysis failed'}), 500
+
+def extract_text_from_txt(txt_path):
+    with open(txt_path, 'r', encoding='utf-8') as file:
+        text = file.read()
+    return text
 
 
 @app.route('/analyze-url', methods=['POST'])
@@ -202,12 +205,9 @@ def analyze_url():
 
         app.logger.debug(f"Fetching URL: {url}")
         text = extract_text_from_url(url)
-        if not text:
+        if not text or not isinstance(text, str):
+            app.logger.error(f"Failed to extract valid text from URL: {url}")
             return jsonify({'error': 'Failed to extract text from URL'}), 500
-
-        app.logger.debug(f"Extracted text length: {len(text)}")
-        if len(text) > 500:
-            app.logger.debug(f"Extracted text preview: {text[:500]}...")
 
         sentiment, emotion = analyze_text(text)
         age_rating = determine_age_appropriateness(text)
@@ -215,6 +215,7 @@ def analyze_url():
     except Exception as e:
         app.logger.error(f"Error analyzing URL: {e}")
         return jsonify({'error': 'URL analysis failed'}), 500
+
 
 
 if __name__ == "__main__":
