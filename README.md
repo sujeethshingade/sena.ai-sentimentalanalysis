@@ -30,3 +30,29 @@ sena.ai leverages advanced AI algorithms to analyze and provide insights into va
 - **TensorFlow**: An open-source machine learning framework used for various AI tasks, including sentiment analysis.
 - **PyTorch**: A deep learning framework used for building and training neural network models.
 - **DeepFace**: Used for facial recognition and emotion detection from images and videos.
+
+### Installation
+#### Frontend
+```
+npm install
+```
+```
+npm run dev
+```
+
+#### Backend 
+```
+cd api && python -m venv venv
+```
+```
+source venv/bin/activate
+```
+```
+pip install -r requirements.text
+```
+```
+pip install tf-keras
+```
+```
+python app.py
+```
