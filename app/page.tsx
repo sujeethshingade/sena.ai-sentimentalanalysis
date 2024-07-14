@@ -153,14 +153,23 @@ export default function Home() {
               </div>
               {analysisResult && (
                 <div className="bg-black text-white p-4 rounded-lg shadow-lg">
-                  <h3 className="text-2xl font-bold mb-4">Analysis Result</h3>
-                  <p><strong>Sentiment:</strong> {analysisResult.sentiment}</p>
-                  {analysisResult.sentiment === 'positive' && <img src="/positive.png" alt="Positive Emoji" className="inline-block ml-2" />}
-                  {analysisResult.sentiment === 'neutral' && <img src="/neutral.png" alt="Neutral Emoji" className="inline-block ml-2" />}
-                  {analysisResult.sentiment === 'negative' && <img src="/negative.png" alt="Negative Emoji" className="inline-block ml-2" />}
-                  <p><strong>Emotion:</strong> {analysisResult.emotion}</p>
-                  <p><strong>Age Rating:</strong> {analysisResult.age_rating}</p>
-                </div>
+                <h3 className="text-2xl font-bold mb-4">Analysis Result</h3>
+                <p>
+                  <strong>Sentiment:</strong> {analysisResult.sentiment}
+                  {analysisResult.sentiment === 'Positive' && (
+                    <img src="positive.png" alt="Positive Emoji" className="inline-block ml-2 w-6 h-6" />
+                  )}
+                  {analysisResult.sentiment === 'Neutral' && (
+                    <img src="neutral.png" alt="Neutral Emoji" className="inline-block ml-2 w-6 h-6" />
+                  )}
+                  {analysisResult.sentiment === 'Negative' && (
+                    <img src="negative.png" alt="Negative Emoji" className="inline-block ml-2 w-6 h-6" />
+                  )}
+                </p>
+                <p><strong>Emotion:</strong> {analysisResult.emotion}</p>
+                <p><strong>Age Rating:</strong> {analysisResult.age_rating}</p>
+              </div>
+              
               )}
             </div>
           </div>
