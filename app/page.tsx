@@ -72,8 +72,9 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       {/* Header */}
       <header className="bg-black-800 text-white p-6">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-3xl font-bold">sena.ai</h1>
+        <div className="container mx-auto flex items-center justify-between">
+          <img src="logo.png" alt="Logo" className="h-24" />
+          <h1 className="text-5xl font-bold" style={{ color: '#FFFF00' }}>sena.ai</h1>
           <a
             href="https://www.youtube.com/watch?v=mx86-rTclzA&autoplay=1"
             className="btn-red"
@@ -91,6 +92,7 @@ export default function Home() {
           </a>
         </div>
       </header>
+
 
       {/* Main content */}
       <main className="flex-grow">
