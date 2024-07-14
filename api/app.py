@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 import logging
 import torch
 
-
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -104,9 +103,14 @@ def map_emotion(emotion_results):
     return most_frequent_emotion
 
 
-def analyze_image(image_path):
-    analysis = DeepFace.analyze(image_path, actions=['emotion'])
-    return analysis
+def analyze_image_emotion(image_path):
+    try:
+        emotion_analysis = DeepFace.analyze(image_path, actions=['emotion'])
+        dominant_emotion = emotion_analysis[0].get('dominant_emotion')
+    except Exception as e:
+        dominant_emotion = f"Error in emotion analysis: {str(e)}"
+
+    return dominant_emotion
 
 
 def extract_text_from_pdf(pdf_path):
@@ -165,6 +169,16 @@ def upload_file():
         return jsonify({'error': 'File upload failed'}), 500
 
 
+def determine_mpaa_rating(emotion):
+    # Heuristic logic to determine MPAA rating based on emotion and sentiment
+    if emotion in ['angry', 'fear', 'disgust', 'sad']:
+        return 'Negative', 'R'
+    elif emotion in ['happy', 'surprise']:
+        return 'Positive', 'G'
+    else:
+        return 'Neutral', 'PG'
+
+
 @app.route('/analyze', methods=['POST'])
 def analyze_content():
     try:
@@ -177,7 +191,12 @@ def analyze_content():
 
         result = {}
         if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.svg')):
-            result = analyze_image(file_path)
+            emotion = analyze_image_emotion(file_path)
+            sentiment, age_rating = determine_mpaa_rating(emotion)
+
+            result = {'sentiment': sentiment,
+                      'emotion': emotion, 'age_rating': age_rating}
+
         elif filename.lower().endswith(('.pdf', '.txt')):
             text = extract_text_from_pdf(file_path) if filename.lower().endswith(
                 '.pdf') else extract_text_from_txt(file_path)
