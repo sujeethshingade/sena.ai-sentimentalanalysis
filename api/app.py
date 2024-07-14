@@ -41,9 +41,6 @@ model = AutoModelForSequenceClassification.from_pretrained(
 # Define the MPAA ratings
 ratings = ["G", "PG", "PG-13", "R", "NC-17"]
 
-restricted_keywords = ['violence', 'drug', 'alcohol',
-                       'explicit', 'adult', 'gambling', 'weapon', 'terrorism', 'suicide', 'shooting', 'blood', 'kill', 'murder', '']
-
 
 def analyze_text(text):
     max_length = 512
